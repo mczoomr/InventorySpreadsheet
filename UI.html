@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f5f5;
+      margin: 20px;
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0;
+      color: #555;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+    }
+
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .toggle-label {
+      margin-right: 10px;
+    }
+
+    /* The switch - the box around the slider */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    /* Hide default HTML checkbox */
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    /* The slider */
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    input:checked+.slider {
+      background-color: #2196F3;
+    }
+
+    input:focus+.slider {
+      box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked+.slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #loading {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    /* Error popup */
+    #errorPopup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #f44336;
+      color: white;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Add Item to Inventory</h1>
+
+  <!-- Add existing item section -->
+  <label for="existingItem">Select Existing Item:</label>
+  <select id="existingItem" onchange="selectExistingItem()">
+    <option value="">-- Select Item --</option>
+    <!-- The options will be dynamically populated from the server-side -->
+  </select>
+
+  <!-- New item section -->
+  <label for="itemName">Item Name:</label>
+  <input type="text" id="itemName" placeholder="Enter item name">
+
+  <label for="quantity">Quantity:</label>
+  <input type="text" id="quantity" placeholder="Enter quantity">
+
+  <label for="notes">Notes:</label>
+  <input type="text" id="notes" placeholder="Enter notes">
+
+  <!-- Toggle switch -->
+  <div class="toggle-container">
+    <label for="clearInputToggle" class="toggle-label">Clear Input Fields:</label>
+    <div class="switch" onclick="toggleCheckbox()">
+      <input type="checkbox" id="clearInputToggle">
+      <span class="slider round"></span>
+    </div>
+  </div>
+
+  <!-- Add loading indicator -->
+  <div id="loading">Adding item...</div>
+
+  <!-- Error popup -->
+  <div id="errorPopup"></div>
+
+  <!-- Add item button -->
+  <button onclick="addItem()">Add Item</button>
+
+  <script>
+    // Declare clearInputToggle globally
+    var clearInputToggle;
+
+    // Function to populate existing items dropdown
+    google.script.run.withSuccessHandler(populateExistingItems)
+      .getExistingItems();
+
+    function populateExistingItems(existingItems) {
+      var dropdown = document.getElementById("existingItem");
+
+      // Clear existing options
+      dropdown.innerHTML = '<option value="">-- Select Item --</option>';
+
+      // Add items to the dropdown
+      for (var i = 0; i < existingItems.length; i++) {
+        var option = document.createElement("option");
+        option.text = existingItems[i];
+        dropdown.add(option);
+      }
+    }
+
+    // Function to handle selection of an existing item
+    function selectExistingItem() {
+      var selectedItem = document.getElementById("existingItem").value.trim();
+      document.getElementById("itemName").value = selectedItem;
+    }
+
+    // Function to add item
+    function addItem() {
+      // Hide error popup
+      document.getElementById("errorPopup").style.display = "none";
+
+      // Show loading
+      document.getElementById("loading").style.display = "block";
+
+      var itemName = document.getElementById("itemName").value.trim();
+      var quantity = document.getElementById("quantity").value;
+      var notes = document.getElementById("notes").value;
+
+      // Access clearInputToggle from the checkbox
+      clearInputToggle = document.getElementById("clearInputToggle").checked;
+
+      // Check for empty fields
+      if (!itemName) {
+        showErrorPopup("All fields must be filled.");
+        return;
+      }
+
+      // Pass input values to server-side function
+      google.script.run.withSuccessHandler(onAddItemSuccess)
+        .addItemToInventory(itemName, quantity, notes, clearInputToggle);
+    }
+
+    // Function to handle success after adding an item
+    function onAddItemSuccess() {
+      // Hide loading
+      document.getElementById("loading").style.display = "none";
+
+      // Clear input fields if the toggle is enabled
+      if (clearInputToggle) {
+        clearInputFields();
+      }
+    }
+
+    // Function to clear input fields
+    function clearInputFields() {
+      document.getElementById("itemName").value = "";
+      document.getElementById("quantity").value = "";
+      document.getElementById("notes").value = "";
+    }
+
+    // Function to toggle checkbox state
+    function toggleCheckbox() {
+      var checkbox = document.getElementById("clearInputToggle");
+      checkbox.checked = !checkbox.checked;
+    }
+
+    // Show error popup
+    function showErrorPopup(message) {
+      var errorPopup = document.getElementById("errorPopup");
+      errorPopup.innerHTML = message;
+      errorPopup.style.display = "block";
+      setTimeout(function () {
+        errorPopup.style.display = "none";
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
