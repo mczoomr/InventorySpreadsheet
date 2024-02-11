@@ -1,3 +1,4 @@
+// Open the side bar
 function openSidebar() {
   var html = HtmlService.createHtmlOutputFromFile('UI')
     .setTitle('Inventory Management')

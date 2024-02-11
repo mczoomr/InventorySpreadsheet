@@ -1,4 +1,4 @@
-// Function to get existing items for the dropdown
+// Get existing items for the dropdown
 function getExistingItems() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Inventory");
   var existingItemsRange = sheet.getRange("A2:A999");
@@ -6,10 +6,10 @@ function getExistingItems() {
   return existingItems;
 }
 
-// Function to be called from the UI to add item to inventory
+// Call from the UI to add item to inventory
 function addItemToInventory(itemName, quantity, notes, clearInputToggle) {
   try {
-    // Your logic to add the item to the inventory sheet goes here
+    // Add the item to the inventory sheet goes here
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Inventory");
 
     // Check if the item already exists
@@ -50,7 +50,7 @@ function addItemToInventory(itemName, quantity, notes, clearInputToggle) {
   }
 }
 
-// Function to clear input fields
+// Clear input fields
 function clearInputFields() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   sheet.getRange("itemName").clearContent();

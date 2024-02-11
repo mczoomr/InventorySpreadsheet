@@ -39,7 +39,6 @@
       margin-right: 10px;
     }
 
-    /* The switch - the box around the slider */
     .switch {
       position: relative;
       display: inline-block;
@@ -47,14 +46,12 @@
       height: 34px;
     }
 
-    /* Hide default HTML checkbox */
     .switch input {
       opacity: 0;
       width: 0;
       height: 0;
     }
 
-    /* The slider */
     .slider {
       position: absolute;
       cursor: pointer;
@@ -93,7 +90,6 @@
       transform: translateX(26px);
     }
 
-    /* Rounded sliders */
     .slider.round {
       border-radius: 34px;
     }
@@ -122,19 +118,6 @@
       margin-top: 20px;
     }
 
-    /* Error popup */
-    #errorPopup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #f44336;
-      color: white;
-      padding: 15px;
-      border-radius: 5px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
   </style>
 </head>
 
@@ -145,7 +128,7 @@
   <label for="existingItem">Select Existing Item:</label>
   <select id="existingItem" onchange="selectExistingItem()">
     <option value="">-- Select Item --</option>
-    <!-- The options will be dynamically populated from the server-side -->
+    <!-- The options will be dynamically populated from the server side -->
   </select>
 
   <!-- New item section -->
@@ -170,9 +153,6 @@
   <!-- Add loading indicator -->
   <div id="loading">Adding item...</div>
 
-  <!-- Error popup -->
-  <div id="errorPopup"></div>
-
   <!-- Add item button -->
   <button onclick="addItem()">Add Item</button>
 
@@ -180,7 +160,7 @@
     // Declare clearInputToggle globally
     var clearInputToggle;
 
-    // Function to populate existing items dropdown
+    // Populate existing items dropdown
     google.script.run.withSuccessHandler(populateExistingItems)
       .getExistingItems();
 
@@ -198,13 +178,13 @@
       }
     }
 
-    // Function to handle selection of an existing item
+    // Handle selection of an existing item
     function selectExistingItem() {
       var selectedItem = document.getElementById("existingItem").value.trim();
       document.getElementById("itemName").value = selectedItem;
     }
 
-    // Function to add item
+    // Add item
     function addItem() {
       // Hide error popup
       document.getElementById("errorPopup").style.display = "none";
@@ -225,12 +205,12 @@
         return;
       }
 
-      // Pass input values to server-side function
+      // Pass input values to server side 
       google.script.run.withSuccessHandler(onAddItemSuccess)
         .addItemToInventory(itemName, quantity, notes, clearInputToggle);
     }
 
-    // Function to handle success after adding an item
+    // Handle success after adding an item
     function onAddItemSuccess() {
       // Hide loading
       document.getElementById("loading").style.display = "none";
@@ -241,14 +221,14 @@
       }
     }
 
-    // Function to clear input fields
+    // Clear input fields
     function clearInputFields() {
       document.getElementById("itemName").value = "";
       document.getElementById("quantity").value = "";
       document.getElementById("notes").value = "";
     }
 
-    // Function to toggle checkbox state
+    // Toggle checkbox state
     function toggleCheckbox() {
       var checkbox = document.getElementById("clearInputToggle");
       checkbox.checked = !checkbox.checked;
