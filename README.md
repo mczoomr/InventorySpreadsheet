@@ -32,7 +32,7 @@ To set up the Inventory Management System, follow these steps:
 
 ### Step 2: Set Up a Button
 1. Insert a Drawing into Google Sheets ("Insert" -> "Drawing").
-2. Click on the inserted Drawing and navigate to the `Assign script` option ("Three dots" -> "Assign script").
+2. Click on the inserted Drawing and navigate to the "Assign script" option ("Three dots" -> "Assign script").
 3. Paste the following and press Ok:  `openSidebar`.
 
 ### Step 3: Create a Google Apps Script Project
