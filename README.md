@@ -43,3 +43,11 @@ To set up the Inventory Management System, follow these steps:
 ### Step 4: Deploy Web App
 1. In the Google Apps Script project, select "Publish" -> "Deploy as web app..."
 1. Choose a version and select "Deploy."
+
+## Contributing
+
+Contributions are welcome! Please open an issue or pull request for any changes or improvements you'd like to make.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
