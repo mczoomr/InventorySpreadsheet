@@ -30,7 +30,6 @@ To set up the Inventory Management System, follow these steps:
 1. Copy the name and content of the following files from this repository and add them to the project:
 
    1. [Code.gs](code.gs)
-   1. [Code.gs](Code.gs)
    1. [OpenUI.gs](OpenUI.gs)
    1. [UI.html](UI.html)
 
