@@ -25,7 +25,7 @@ Keep track of inventory on google sheets with just the click of a button.
 
 ## Setup
 To set up the Inventory Management System, follow these steps:
-  
+
 ### Step 1: Create a Google Sheets Document
 1. Go to Google Sheets and create a new spreadsheet.
 1. Set up the spreadsheet with "Item Name" will be in Collumn A to B, "Quantity" in Collumn C and "Notes" in Collumn D.
@@ -37,7 +37,12 @@ To set up the Inventory Management System, follow these steps:
 
 ### Step 3: Create a Google Apps Script Project
 1. Go to Google Apps Script and create a new project.
-1. Replace the default code in the Code.gs file with the provided server-side functions.
+1. Copy the name and content of the following files from this repository and add them to the project:
+   
+   1. [Code.gs](code.gs)
+   1. [OpenUI.gs](OpenUI.gs)
+   1. [UI.html](UI.html)
+   
 1. Save the project.
 
 ### Step 4: Deploy Web App
